@@ -1,12 +1,12 @@
-# Personal Digital Twin Wizard
+# 数字永生
 
-**个人数字分身向导** — 通过多关卡人格配置与记忆碎片，生成专属数字分身，并将配置与记忆同步到 **EverMemOS Cloud** 作为长期记忆，供进化聊天室、分身好友库等场景的对话与检索使用。
+**数字永生** — 个人数字分身向导。通过多关卡人格配置与记忆碎片，生成专属数字分身，并将配置与记忆同步到 **EverMemOS Cloud** 作为长期记忆，供进化聊天室、分身好友库等场景的对话与检索使用。
 
 ---
 
 ## Project Introduction
 
-This project is a **web application** for building and managing a personal digital twin:
+**数字永生** is a **web application** for building and managing a personal digital twin:
 
 - **灵魂拷贝 (Soul Copy)** — Multi-level personality wizard: configure identity, values, life stages, and sync to EverMemOS as structured memory.
 - **记忆碎片 (Memory Vault)** — Import and store personal memories (text, files); sync to cloud for use in twin conversations.
