@@ -10,7 +10,7 @@ interface TwinStudioProps {
 export const TwinStudio: React.FC<TwinStudioProps> = ({ onNavigateToWorkshop, onNavigateToMemoryVault }) => {
   // Main Studio State：聚焦一个本体分身
   const [twins, setTwins] = useState([
-    { id: "t-001", name: "数字永生分身", desc: "基于你全部人生记忆的一体化分身", avatar: "🧬" }
+    { id: "t-001", name: "数字永生分身", desc: "基于你全部人生记忆的一体化分身", avatar: "/avatars/memoji/2.png" }
   ]);
   const [activeTwinId, setActiveTwinId] = useState("t-001");
   const [studioTab, setStudioTab] = useState<"dashboard" | "appearance" | "personality" | "memory">("dashboard");
@@ -145,13 +145,13 @@ export const TwinStudio: React.FC<TwinStudioProps> = ({ onNavigateToWorkshop, on
     "/avatars/memoji/1.png",
     "/avatars/memoji/2.png",
     "/avatars/memoji/3.png",
-    "/avatars/memoji/4.PNG",
-    "/avatars/memoji/5.PNG",
-    "/avatars/memoji/6.PNG",
-    "/avatars/memoji/7.PNG",
-    "/avatars/memoji/8.PNG",
-    "/avatars/memoji/9.PNG",
-    "/avatars/memoji/10.PNG",
+    "/avatars/memoji/4.png",
+    "/avatars/memoji/5.png",
+    "/avatars/memoji/6.png",
+    "/avatars/memoji/7.png",
+    "/avatars/memoji/8.png",
+    "/avatars/memoji/9.png",
+    "/avatars/memoji/10.png",
   ];
   const [selectedPreset, setSelectedPreset] = useState(memojiPresets[0]);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
