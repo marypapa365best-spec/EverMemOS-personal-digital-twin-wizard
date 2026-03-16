@@ -1,6 +1,21 @@
-# 数字永生
+# Aeterna（数字永生）
 
-**Aeterna（数字永生）** 的核心目标是：**帮用户把自己的人生阅历、人格与记忆系统性地留存在数字世界，实现一种“数字永生”的可能性。**  
+核心目标是：**帮用户把自己的人生阅历、人格与记忆系统性地留存在数字世界，实现一种“数字永生”的可能性。**  
+
+---
+
+## Quick reference for judges / deploy
+
+- **快速在线体验（推荐给评委）：**  
+  直接打开 `http://170.106.180.152:3001/` → 点击右上角 **设置** → 填入 EverMemOS API Key 以及 LLM API Key（可选择 OpenAI / Gemini）→ 保存后即可体验完整 Demo。  
+  *说明：该线上版本可能相对 GitHub 仓库略有滞后，一切功能与代码以 GitHub 上的最新版本为准。*
+
+- **本地开发体验（含前后端）：**  
+  在项目根目录执行：`npm install` → `npm run dev` → 浏览器打开 `http://localhost:5173` → 在应用内 **设置** 中配置 EverMemOS / LLM Key（如需）。
+
+- **生产/评审环境部署（单 Node 进程）：**  
+  `npm run build` → `npm run start`，然后访问 `http://服务器IP:3001`。  
+  更详细的云端部署（如腾讯云）说明可参考 `docs/` 目录或 GitHub 仓库中的补充文档。
 
 ---
 
@@ -159,13 +174,20 @@ Do not open `index.html` directly; the chat and save APIs need the backend.
 
 ## Repository
 
-- **GitHub:** [https://github.com/marypapa365best-spec/EverMemOS-personal-digital-twin-wizard](https://github.com/marypapa365best-spec/EverMemOS-personal-digital-twin-wizard)
+- **GitHub:** [https://github.com/marypapa365best-spec/Aeterna-EverMemOS](https://github.com/marypapa365best-spec/Aeterna-EverMemOS)
 - **License:** See repository.
 
 ---
 
 ## Quick reference for judges / deploy
 
-- **Online demo:** Open the deployed URL → **设置** → enter your EverMemOS (and optionally OpenAI/Gemini) API Key → save. No local setup required.
-- **Local run:** `npm install` → `npm run dev` → open http://localhost:5173 → configure API Key in 设置 if needed.
-- **Deploy (e.g. single Node process):** `npm run build` then `npm run start`; see `docs/` for Tencent Cloud or other deployment notes if present.
+- **快速在线体验（推荐给评委）：**  
+  直接打开 `http://170.106.180.152:3001/` → 点击右上角 **设置** → 填入 EverMemOS API Key 以及 LLM API Key（可选择 OpenAI / Gemini）→ 保存后即可体验完整 Demo。  
+  *说明：该线上版本可能相对 GitHub 仓库略有滞后，一切功能与代码以 GitHub 上的最新版本为准。*
+
+- **本地开发体验（含前后端）：**  
+  在项目根目录执行：`npm install` → `npm run dev` → 浏览器打开 `http://localhost:5173` → 在应用内 **设置** 中配置 EverMemOS / LLM Key（如需）。
+
+- **生产/评审环境部署（单 Node 进程）：**  
+  `npm run build` → `npm run start`，然后访问 `http://服务器IP:3001`。  
+  更详细的云端部署（如腾讯云）说明可参考 `docs/` 目录或 GitHub 仓库中的补充文档。
