@@ -7,8 +7,7 @@
 ## Project Introduction
 
 通过多关卡人格配置与记忆碎片，生成专属数字分身，并将配置与记忆同步到 **EverMemOS Cloud** 作为长期记忆，供进化聊天室、分身好友库等场景的对话与检索使用。  
-*(Aeterna is a personal digital-twin experience built on EverMemOS, focusing on long-term personality and memory preservation.)*
-它围绕“人格塑形 → 记忆注入 → 云端保存 → 分身养成 → 对话与进化 → 数字纪念”几个阶段，拆成 **9 个功能板块**：
+围绕“人格塑形 → 记忆注入 → 云端保存 → 分身养成 → 对话与进化 → 数字纪念”几个阶段，拆成 **9 个功能板块**：
 
 - **1️⃣ 灵魂拷贝 6 关（Personality Wizard）**  
   通过 6 个关卡，引导用户填入从基础信息、成长环境、创伤与高光、价值观、知识体系到潜意识的关键片段：  
