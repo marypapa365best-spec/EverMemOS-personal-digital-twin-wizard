@@ -4415,6 +4415,47 @@ input:checked+.toggle-slider:before {
   margin-right: 0;
 }
 
+/* AI 社交：分身好友库 / 社交雷达策略 Tab 按钮 */
+.aisocial-main-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(241, 245, 249, 0.9) 100%);
+  border: 1px solid rgba(192, 132, 252, 0.2);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(148, 163, 184, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.aisocial-tab-btn {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  background: transparent;
+  color: #64748b;
+}
+
+.aisocial-tab-btn:hover {
+  color: #475569;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.aisocial-tab-btn.active {
+  background: linear-gradient(90deg, #fb923c, #f472b6);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(249, 115, 22, 0.3), 0 0 0 1px rgba(244, 114, 182, 0.25);
+}
+
+.aisocial-tab-btn.active:hover {
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.28), 0 0 0 1px rgba(167, 139, 250, 0.3);
+}
+
 .permissions-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -5110,6 +5151,8 @@ input:checked+.toggle-slider:before {
   cursor: pointer;
   transition: all 0.22s;
   backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
 }
 
 .roster-card:hover {
@@ -5120,9 +5163,76 @@ input:checked+.toggle-slider:before {
 }
 
 .roster-card.active {
-  background: rgba(59,130,246,0.12);
-  border-color: rgba(59,130,246,0.35);
-  box-shadow: 0 4px 16px rgba(59,130,246,0.15);
+  border-color: rgba(0,159,253,0.6);
+  box-shadow:
+    0 0.3em 0.8em rgba(0, 0, 0, 0.3),
+    0 1.5em 2em rgba(0, 0, 0, 0.15);
+}
+
+/* 数字永生分身：激活卡片炫彩背景（Uiverse.io @SachinKumar666 风格） */
+.roster-card.active::before,
+.roster-card.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.roster-card.active::before {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 35px,
+      rgba(255, 255, 255, 0.15) 35px,
+      rgba(255, 255, 255, 0.15) 70px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 35px,
+      rgba(255, 255, 255, 0.15) 35px,
+      rgba(255, 255, 255, 0.15) 70px
+    ),
+    linear-gradient(90deg, #009ffd, #2a2a72);
+}
+
+.roster-card.active::after {
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 20%,
+      rgba(0, 0, 0, 0.2) 70%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(255, 255, 255, 0.15) 0deg 30deg,
+      transparent 30deg 60deg
+    );
+  mix-blend-mode: overlay;
+  z-index: -1;
+  animation: roster-card-rotate 10s linear infinite;
+}
+
+.roster-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes roster-card-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roster-card.active::after {
+    animation: none;
+  }
 }
 
 .roster-avatar {
@@ -5155,6 +5265,20 @@ input:checked+.toggle-slider:before {
   margin: 0;
   font-size: 11px;
   color: #64748b;
+}
+
+/* 数字永生分身卡片：在炫彩背景上提亮文字颜色 */
+.roster-card.active .roster-info h3 {
+  color: #e5e7eb;
+}
+
+.roster-card.active .roster-info p {
+  color: #e5e7eb;
+}
+
+.roster-card.active .twin-badge-core {
+  background: rgba(251, 191, 36, 0.95);
+  color: #111827;
 }
 
 .btn-create-twin {
@@ -5268,6 +5392,11 @@ input:checked+.toggle-slider:before {
   margin-bottom: 24px;
 }
 
+.workshop-card.soul-bindings-card {
+  background: linear-gradient(180deg, rgba(124,58,237,0.07) 0%, rgba(14,165,233,0.04) 100%);
+  border: 1px solid rgba(124,58,237,0.1);
+}
+
 /* Soul Bindings List */
 .soul-binding-list {
   display: flex;
@@ -5280,7 +5409,7 @@ input:checked+.toggle-slider:before {
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(248,250,255,0.8));
+  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,255,0.9));
   border: 1px solid rgba(124,58,237,0.1);
   border-radius: 14px;
   cursor: pointer;
@@ -5291,16 +5420,79 @@ input:checked+.toggle-slider:before {
 }
 
 .soul-binding-item:hover {
-  background: rgba(255,255,255,0.95);
   border-color: rgba(124,58,237,0.25);
   box-shadow: 0 4px 16px rgba(124,58,237,0.1);
   transform: translateX(2px);
 }
 
 .soul-binding-item.selected {
-  background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(14,165,233,0.07));
-  border-color: rgba(124,58,237,0.4);
-  box-shadow: 0 4px 16px rgba(124,58,237,0.14);
+  border-color: rgba(0,159,253,0.55);
+  box-shadow: 0 6px 18px rgba(15,23,42,0.25);
+}
+
+/* 灵魂注入：Level 卡片炫彩背景（视效来自 Uiverse.io @SachinKumar666） */
+.soul-binding-item::before,
+.soul-binding-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.soul-binding-item::before {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 35px,
+      rgba(255, 255, 255, 0.16) 35px,
+      rgba(255, 255, 255, 0.16) 70px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 35px,
+      rgba(255, 255, 255, 0.16) 35px,
+      rgba(255, 255, 255, 0.16) 70px
+    ),
+    linear-gradient(90deg, #009ffd, #2a2a72);
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+  z-index: 0;
+}
+
+.soul-binding-item::after {
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 22%,
+      rgba(0, 0, 0, 0.18) 70%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+  z-index: 0;
+}
+
+.soul-binding-item.selected::before,
+.soul-binding-item.selected::after {
+  opacity: 1;
+}
+
+@keyframes soul-card-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .soul-binding-item::after {
+    animation: none;
+  }
 }
 
 .soul-keywords-wall {
@@ -5325,6 +5517,15 @@ input:checked+.toggle-slider:before {
 .soul-binding-info {
   position: relative;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.soul-binding-info-main {
+  flex: 1;
+  min-width: 0;
 }
 
 .soul-binding-checkbox {
@@ -5360,6 +5561,31 @@ input:checked+.toggle-slider:before {
   font-size: 13px;
   color: #64748b;
   line-height: 1.4;
+}
+
+.soul-bg-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--soul-progress, 0%);
+  z-index: 0;
+  border-radius: 14px 0 0 14px;
+  background-color: rgba(249, 163, 79, 0.5);
+  overflow: hidden;
+}
+
+.soul-bg-progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.25) 0,
+    rgba(255, 255, 255, 0.25) 14px,
+    transparent 14px,
+    transparent 32px
+  );
 }
 
 .soul-binding-badge {
@@ -5923,6 +6149,145 @@ body.theme-classic .twin-selector-dropdown option {
   flex-direction: column;
   padding: 28px 24px;
   overflow: hidden;
+  position: relative;
+}
+
+.friends-roster-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.friends-roster-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.friends-roster-title .card-title {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.friends-plus-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.friends-plus-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(148, 163, 184, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  transform: translateY(-7px);
+}
+
+.friends-plus-btn:hover {
+  transform: translateY(-7px) scale(1.1);
+  box-shadow: 0 6px 16px rgba(148, 163, 184, 0.75);
+  background: #ffffff;
+}
+
+.friends-action-menu {
+  position: absolute;
+  top: 32px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 10px;
+  padding: 0;
+  box-shadow: 0 12px 30px rgba(148, 163, 184, 0.4);
+  min-width: 120px;
+  z-index: 20;
+  overflow: hidden; /* 悬停背景被容器裁剪 */
+}
+
+.friends-action-item {
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  color: #0f172a;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.friends-action-item:hover {
+  background: linear-gradient(90deg, #ede9fe, #fdf2ff);
+  color: #4c1d95;
+}
+
+.friends-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.friends-action-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.friends-add-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.friends-add-input {
+  width: 120px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  font-size: 12px;
+  outline: none;
+}
+
+.friends-add-input::placeholder {
+  color: rgba(148, 163, 184, 0.85);
+}
+
+.friends-add-btn {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+
+.friends-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.6);
+}
+
+.friends-add-hint {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #64748b;
 }
 
 .dashboard-card.friends-roster::before {
@@ -5964,6 +6329,13 @@ body.theme-classic .twin-selector-dropdown option {
   border: 1px solid transparent;
   background: rgba(255, 255, 255, 0.8);
   border-left: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.friend-item > * {
+  position: relative;
+  z-index: 1; /* 确保头像与文字在背景之上 */
 }
 
 .friend-item:hover {
@@ -5972,10 +6344,38 @@ body.theme-classic .twin-selector-dropdown option {
 }
 
 .friend-item.active {
-  background: linear-gradient(135deg, rgba(250, 240, 255, 0.98) 0%, rgba(254, 231, 243, 0.95) 100%);
-  border-color: rgba(167, 139, 250, 0.4);
-  border-left-color: #a78bfa;
-  box-shadow: 0 4px 16px rgba(167, 139, 250, 0.15);
+  border-color: rgba(15, 23, 42, 0.05);
+  border-left-color: #009ffd;
+  box-shadow:
+    0 0.3em 0.8em rgba(0, 0, 0, 0.25),
+    0 1.3em 1.8em rgba(15, 23, 42, 0.2);
+}
+
+.friend-item.active::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 35px,
+      rgba(255, 255, 255, 0.16) 35px,
+      rgba(255, 255, 255, 0.16) 70px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 35px,
+      rgba(255, 255, 255, 0.16) 35px,
+      rgba(255, 255, 255, 0.16) 70px
+    ),
+    linear-gradient(90deg, #009ffd, #2a2a72);
+  z-index: 0;
+}
+
+.friend-item.active::after {
+  content: none;
 }
 
 .friend-avatar {
@@ -6030,6 +6430,19 @@ body.theme-classic .twin-selector-dropdown option {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.friend-item.active .friend-info h4 {
+  color: #e0e7ff;
+}
+
+.friend-item.active .friend-comp {
+  color: #f9fafb;
+  background: rgba(59, 130, 246, 0.4);
+}
+
+.friend-item.active .friend-desc {
+  color: #e5e7eb;
 }
 
 /* 右侧：对话窗口容器 - 背景图 + 半透明遮罩保证文字可读 */
@@ -6097,6 +6510,47 @@ body.theme-classic .twin-selector-dropdown option {
   border-radius: 99px;
 }
 
+.friend-add-demo {
+  display: none;
+}
+
+.friend-add-demo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.friend-add-input {
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  font-size: 12px;
+  outline: none;
+}
+
+.friend-add-input::placeholder {
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.friend-add-button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.friend-add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.55);
+}
+
 .friends-chat-window .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -6158,21 +6612,44 @@ body.theme-classic .twin-selector-dropdown option {
 }
 
 .friends-chat-window .chat-input-area .btn-primary {
-  padding: 0 24px;
-  border-radius: 12px;
-  background: #0ea5e9;
-  color: #fff;
-  border: none;
-  font-weight: 600;
+  outline: none;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
+  border: none;
+  padding: 0.9rem 2rem;
+  margin: 0;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+  position: relative;
+  display: inline-block;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f472b6, #a855f7);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(168, 85, 247, 0.4);
+}
+
+.friends-chat-window .chat-input-area .btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 100%;
+  left: -10%;
+  z-index: 0;
+  background: linear-gradient(90deg, #0ea5e9, #6366f1);
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
 }
 
 .friends-chat-window .chat-input-area .btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  background: #0284c7;
-  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+  box-shadow: 0 8px 18px rgba(168, 85, 247, 0.4);
+}
+
+.friends-chat-window .chat-input-area .btn-primary:hover:not(:disabled)::before {
+  transform: translate3d(100%, 0, 0);
 }
 
 .friends-chat-window .chat-input-area .btn-primary:disabled {
@@ -7914,14 +8391,14 @@ body.theme-classic .radar-select option {
 
 .dc-anim-candle-icon {
   font-size: 56px;
-  animation: dc-candle-float 5s ease-out forwards;
+  animation: dc-candle-float 10s ease-out forwards;
   filter: drop-shadow(0 0 14px rgba(251, 191, 36, 1));
 }
 
 @keyframes dc-candle-float {
   0% {
     transform: translateY(30px) scale(0.8);
-    opacity: 0;
+    opacity: 1;
   }
 
   20% {
@@ -7934,6 +8411,98 @@ body.theme-classic .radar-select option {
 
   100% {
     transform: translateY(-10px) scale(1);
+    opacity: 1;
+  }
+}
+
+.dc-anim-hug {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.dc-anim-hug-person {
+  font-size: 40px;
+  opacity: 0;
+}
+
+.dc-anim-hug-left {
+  animation: dc-hug-person-left 4s ease-out forwards;
+}
+
+.dc-anim-hug-right {
+  animation: dc-hug-person-right 4s ease-out forwards;
+}
+
+.dc-anim-hug-heart {
+  font-size: 52px;
+  animation: dc-hug-heart 4s ease-out forwards;
+  filter: drop-shadow(0 0 16px rgba(248, 113, 113, 0.95));
+}
+
+@keyframes dc-hug-person-left {
+  0% {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+
+  25% {
+    transform: translateX(-10px);
+    opacity: 1;
+  }
+
+  60% {
+    transform: translateX(-6px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-6px);
+    opacity: 0;
+  }
+}
+
+@keyframes dc-hug-person-right {
+  0% {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+
+  25% {
+    transform: translateX(10px);
+    opacity: 1;
+  }
+
+  60% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(6px);
+    opacity: 0;
+  }
+}
+
+@keyframes dc-hug-heart {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+
+  20% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.9);
     opacity: 0;
   }
 }
@@ -8040,10 +8609,10 @@ body.theme-classic .radar-select option {
   letter-spacing: 0.05rem;
   position: relative;
   display: inline-block;
-  border-radius: 500px;
+  border-radius: 8px;
   overflow: hidden;
   background: linear-gradient(135deg, #f472b6, #a855f7);
-  color: ghostwhite;
+  color: #ffffff;
   box-shadow: 0 8px 18px rgba(168, 85, 247, 0.4);
 }
 
@@ -8054,7 +8623,7 @@ body.theme-classic .radar-select option {
 }
 
 .dc-btn-ritual:hover:not(:disabled) span {
-  color: #000;
+  color: #ffffff;
 }
 
 .dc-btn-ritual::before {
@@ -8066,7 +8635,7 @@ body.theme-classic .radar-select option {
   height: 100%;
   left: -10%;
   z-index: 0;
-  background: #000;
+  background: linear-gradient(90deg, #0ea5e9, #6366f1);
   transform: skew(30deg);
   transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
 }
@@ -8620,8 +9189,8 @@ body.theme-classic .radar-select option {
 }
 
 .milestone-info-badge {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   border: none;
   display: flex;
@@ -8638,10 +9207,29 @@ body.theme-classic .radar-select option {
 }
 
 .milestone-info-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: block;
   fill: currentColor;
+}
+
+/* AI 社交：好友契合度注释图标（避免被其它容器裁剪） */
+.friends-info-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  color: rgba(124, 58, 237, 0.7);
+  background: transparent;
+  cursor: default;
+  transform: translateY(-7px);
+}
+
+.friends-info-badge .milestone-info-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .milestones-timeline {

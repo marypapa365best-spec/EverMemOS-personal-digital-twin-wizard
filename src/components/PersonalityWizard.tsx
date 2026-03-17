@@ -504,14 +504,25 @@ const RESTORED_DEMO_FORM_STATE: Record<LevelId, FormState> = {
 interface PersonalityWizardProps {
   twinId: string;
   embedded?: boolean;
+  initialLevel?: number;
 }
 
 export const PersonalityWizard: React.FC<PersonalityWizardProps> = ({
   twinId,
-  embedded = false
+  embedded = false,
+  initialLevel
 }) => {
   const [theme, setTheme] = useState<"classic" | "cosmic" | "cosmic-fire" | "aurora" | "light" | "rainbow">("aurora");
-  const [currentLevel, setCurrentLevel] = useState<LevelId>(getInitialLevel);
+  const [currentLevel, setCurrentLevel] = useState<LevelId>(() => {
+    if (initialLevel && initialLevel >= 1 && initialLevel <= 6) return initialLevel as LevelId;
+    return getInitialLevel();
+  });
+  useEffect(() => {
+    if (initialLevel && initialLevel >= 1 && initialLevel <= 6) {
+      setCurrentLevel(initialLevel as LevelId);
+    }
+  }, [initialLevel]);
+
   const [completedLevel, setCompletedLevel] = useState<LevelId | 0>(1);
   const [formState, setFormState] = useState<Record<LevelId, FormState>>(() => ({ ...RESTORED_DEMO_FORM_STATE }));
   const [errors, setErrors] = useState<Record<string, string | null>>({});

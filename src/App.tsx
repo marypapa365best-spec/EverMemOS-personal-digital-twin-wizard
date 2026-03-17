@@ -14,6 +14,7 @@ type TabType = "studio" | "wizard" | "evo-chat" | "memory" | "cloud" | "skills" 
 
 export const App: React.FC = () => {
   const [tab, setTab] = useState<TabType>("studio");
+  const [wizardInitialLevel, setWizardInitialLevel] = useState<number | undefined>(undefined);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState(() => getStoredApiKey() ?? "");
   const [displayNameInput, setDisplayNameInput] = useState(() => getStoredDisplayName() ?? "");
@@ -290,9 +291,10 @@ export const App: React.FC = () => {
               <TwinStudio
                 onNavigateToWorkshop={() => setTab("skills")}
                 onNavigateToMemoryVault={() => setTab("memory")}
+                onNavigateToWizard={(level) => { setWizardInitialLevel(level); setTab("wizard"); }}
               />
             )}
-            {tab === "wizard" && <PersonalityWizard twinId={twinId} />}
+            {tab === "wizard" && <PersonalityWizard twinId={twinId} initialLevel={wizardInitialLevel} />}
             {tab === "evo-chat" && <EvolutionChat twinId={twinId} onNavigateToPresets={() => setTab("presets")} />}
             {tab === "memory" && <MemoryVault />}
             {tab === "cloud" && <CloudMemoryView twinId={twinId} />}

@@ -10,7 +10,7 @@ interface CemeteryConfig {
   imageUrl?: string;
 }
 
-type RitualType = "drink" | "candle" | "message";
+type RitualType = "drink" | "candle" | "message" | "hug";
 
 interface RitualLog {
   id: string;
@@ -148,13 +148,16 @@ export const DigitalCemetery: React.FC = () => {
     };
     setRituals((prev) => [log, ...prev].slice(0, 20));
 
-    // 触发短暂动画（喝一杯 3 秒，点灯 5 秒）
+    // 触发短暂动画（喝一杯 3 秒，点灯 10 秒，抱抱 4 秒）
     if (type === "drink") {
       setActiveAnim("drink");
       setTimeout(() => setActiveAnim(null), 3000);
     } else if (type === "candle") {
       setActiveAnim("candle");
-      setTimeout(() => setActiveAnim(null), 5000);
+      setTimeout(() => setActiveAnim(null), 10000);
+    } else if (type === "hug") {
+      setActiveAnim("hug");
+      setTimeout(() => setActiveAnim(null), 4000);
     }
   };
 
@@ -166,6 +169,9 @@ export const DigitalCemetery: React.FC = () => {
     }
     if (r.type === "candle") {
       return `${timeStr} · ${who} · 🕯️ 点亮了一盏灯。`;
+    }
+    if (r.type === "hug") {
+      return `${timeStr} · ${who} · 🤗 给了你一个拥抱。`;
     }
     const msg = r.message ? `“${r.message}”` : "";
     return `${timeStr} · ${who} · 💬 ${msg}`;
@@ -201,7 +207,11 @@ export const DigitalCemetery: React.FC = () => {
           {!loading && (
             <div className="dc-preview-card">
               <div className="dc-preview-image">
-                <img src={sceneImages[sceneIndex] || sceneImages[0]} className="dc-preview-img" alt="" />
+                <img
+                  src={sceneImages[sceneIndex] || sceneImages[0]}
+                  className="dc-preview-img"
+                  alt=""
+                />
                 {activeAnim === "drink" && (
                   <div className="dc-anim-overlay dc-anim-drink">
                     <span className="dc-anim-glass dc-anim-glass-left">🍺</span>
@@ -211,6 +221,13 @@ export const DigitalCemetery: React.FC = () => {
                 {activeAnim === "candle" && (
                   <div className="dc-anim-overlay dc-anim-candle">
                     <span className="dc-anim-candle-icon">🕯️</span>
+                  </div>
+                )}
+                {activeAnim === "hug" && (
+                  <div className="dc-anim-overlay dc-anim-hug">
+                    <span className="dc-anim-hug-person dc-anim-hug-left">❤️</span>
+                    <span className="dc-anim-hug-heart">🤗</span>
+                    <span className="dc-anim-hug-person dc-anim-hug-right">❤️</span>
                   </div>
                 )}
               </div>
@@ -282,6 +299,13 @@ export const DigitalCemetery: React.FC = () => {
                 onClick={() => appendRitual("candle")}
               >
                 <span>🕯️ 点一盏灯</span>
+              </button>
+              <button
+                type="button"
+                className="dc-btn-ritual"
+                onClick={() => appendRitual("hug")}
+              >
+                <span>🤗 抱抱 TA</span>
               </button>
             </div>
             <div className="dc-form-row">

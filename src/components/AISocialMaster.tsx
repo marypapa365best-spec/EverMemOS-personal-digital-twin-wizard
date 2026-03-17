@@ -4,7 +4,7 @@ import { chatWithGeminiDirect, fetchMemoriesForContext } from "../api/twinApi";
 
 export const AISocialMaster: React.FC = () => {
   const [activeTwin, setActiveTwin] = useState("t-001"); // 唯一的数字永生分身
-  const [mainTab, setMainTab] = useState<"radar" | "friends">("radar");
+  const [mainTab, setMainTab] = useState<"radar" | "friends">("friends");
   const [isSandboxActive, setIsSandboxActive] = useState(false);
   const [sandboxPhase, setSandboxPhase] = useState<"scanning" | "scanned">("scanning");
   const [scannedCandidates, setScannedCandidates] = useState<Array<{ id: string; name: string; avatar: string; comp: string; desc: string }>>([]);
@@ -16,6 +16,8 @@ export const AISocialMaster: React.FC = () => {
   const [selectedMbti, setSelectedMbti] = useState<string[]>([]);
   const [mbtiDropdownOpen, setMbtiDropdownOpen] = useState(false);
   const mbtiDropdownRef = useRef<HTMLDivElement>(null);
+  const [friendsMenuOpen, setFriendsMenuOpen] = useState(false);
+  const friendsMenuRef = useRef<HTMLDivElement>(null);
 
   // 与「形象设计」一致：从 localStorage 读取分身头像，用于沙盒中心「我的分身」圆圈
   const TWIN_AVATAR_STORAGE_KEY = "twin_avatar";
@@ -56,6 +58,23 @@ export const AISocialMaster: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [mbtiDropdownOpen]);
 
+  // 点击「+」以外任意处（切换好友、点右侧聊天等）时关闭「添加好友」菜单
+  useEffect(() => {
+    if (!friendsMenuOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (friendsMenuRef.current && !friendsMenuRef.current.contains(e.target as Node)) {
+        setFriendsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [friendsMenuOpen]);
+
+  // 切换主 tab（分身好友库 / 社交雷达策略）时关闭菜单
+  useEffect(() => {
+    setFriendsMenuOpen(false);
+  }, [mainTab]);
+
   const MBTI_OPTIONS = [
     "ISTJ The Inspector",
     "ISFJ The Nurturer",
@@ -95,6 +114,9 @@ export const AISocialMaster: React.FC = () => {
   const [friendLoading, setFriendLoading] = useState(false);
   // 按好友 id 分别保存对话记录，切换好友时不会混在一起
   const [messagesByFriend, setMessagesByFriend] = useState<Record<string, { sender: "user" | "friend", text: string }[]>>({});
+  // Demo：通过好友 ID 搜索添加（仅前端演示，不真正发请求）
+  const [addFriendId, setAddFriendId] = useState("");
+  const [addFriendHint, setAddFriendHint] = useState<string | null>(null);
 
   const mockFriends = [
     { id: "f-001", name: "Charlie_09", avatar: "👨‍💻", comp: "95%", desc: "独立开发者，热爱 Next.js 架构推演" },
@@ -230,45 +252,29 @@ export const AISocialMaster: React.FC = () => {
 
       {/* LEVEL 2: Sub Navigation */}
       <div className="analytics-header" style={{ marginBottom: '16px' }}>
-        <div className="aisocial-main-tabs" style={{ display: 'inline-flex', background: 'rgba(255, 255, 255, 0.1)', padding: '4px', borderRadius: '12px', gap: '4px', marginBottom: '16px' }}>
+        <div className="aisocial-main-tabs">
           <button
-            className={`aisocial-tab-btn ${mainTab === 'radar' ? 'active' : ''}`}
-            onClick={() => setMainTab('radar')}
-            style={{
-              background: mainTab === 'radar' ? '#ffffff' : 'transparent',
-              color: mainTab === 'radar' ? '#0f172a' : '#94a3b8',
-              border: 'none',
-              boxShadow: mainTab === 'radar' ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
-              padding: '8px 24px', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s',
-              fontWeight: mainTab === 'radar' ? 600 : 500,
-              fontSize: '14px'
-            }}
-          >
-            📍 社交雷达策略
-          </button>
-          <button
+            type="button"
             className={`aisocial-tab-btn ${mainTab === 'friends' ? 'active' : ''}`}
             onClick={() => setMainTab('friends')}
-            style={{
-              background: mainTab === 'friends' ? '#ffffff' : 'transparent',
-              color: mainTab === 'friends' ? '#0f172a' : '#94a3b8',
-              border: 'none',
-              boxShadow: mainTab === 'friends' ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
-              padding: '8px 24px', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s',
-              fontWeight: mainTab === 'friends' ? 600 : 500,
-              fontSize: '14px'
-            }}
           >
             🤝 分身好友库
           </button>
+          <button
+            type="button"
+            className={`aisocial-tab-btn ${mainTab === 'radar' ? 'active' : ''}`}
+            onClick={() => setMainTab('radar')}
+          >
+            📍 社交雷达策略
+          </button>
         </div>
 
-        <h2 style={{ color: mainTab === 'radar' && isSandboxActive ? "#22d3ee" : "#000000", fontSize: '18px', margin: '0 0 8px 0', fontWeight: 600 }}>
+        <h2 style={{ color: mainTab === 'radar' && isSandboxActive ? "#22d3ee" : "#000000", fontSize: '18px', margin: '0 0 8px 0', fontWeight: 600, textAlign: 'center' }}>
           {mainTab === 'radar'
             ? (isSandboxActive ? "🌌 虚拟沙盒运行中 (Matrix Online)" : "配置社交巡游参数 (Pre-Flight Configuration)")
             : "跨维度灵魂共振 (AI Friends Network)"}
         </h2>
-        <p className="analytics-subtitle" style={{ margin: 0, fontSize: '14px' }}>
+        <p className="analytics-subtitle" style={{ margin: 0, fontSize: '14px', textAlign: 'center' }}>
           {mainTab === 'friends'
             ? "在下面查看你的分身在沙盒中结识的高契合度 AI 好友，并随时进行直接对话。"
             : (isSandboxActive ? "数字分身已切入暗网，正在进行无监督的自治社交巡航..." : "在这里设定分身社交的红线、目标与航段，然后将其发射到广域沙盒中。")
@@ -552,7 +558,67 @@ export const AISocialMaster: React.FC = () => {
 
           {/* 左侧：好友列表，点击切换右侧对话 */}
           <div className="dashboard-card friends-roster">
-            <h3 className="card-title">灵魂雷达匹配 ({mockFriends.length})</h3>
+            <div className="friends-roster-header">
+              <div className="friends-roster-title">
+                <h3 className="card-title">好友列表 ({mockFriends.length})</h3>
+                <div
+                  className="friends-info-badge"
+                  title={
+                    "好友契合度（0–100）由三部分构成：\n" +
+                    "• 人格维度匹配（50% 权重）：对比分身的「认知维度矩阵」与好友预设人格指纹，在情绪稳定、社交能量、开放性等维度上差距越小，得分越高；\n" +
+                    "• 兴趣 / 话题重叠（30% 权重）：根据 Memory Vault 中最近上传到 EverMemOS 的标签，与好友偏好标签的交集越多，契合度越高；\n" +
+                    "• 聊天反馈修正（20% 权重）：你在 AI 社交中对该好友对话的 👍 / 👎 比例，会微调契合度，让列表越来越符合你真实的喜欢程度。\n\n" +
+                    "所有计算只在本地浏览器完成，用于 Demo 展示，不会上传到任何第三方。"
+                  }
+                >
+                  <svg
+                    viewBox="0 0 1024 1024"
+                    aria-hidden="true"
+                    focusable="false"
+                    className="milestone-info-icon"
+                  >
+                    <path d="M512 64a448 448 0 1 0 0 896A448 448 0 0 0 512 64z m0 820.032A372.032 372.032 0 0 1 512 139.968a372.032 372.032 0 0 1 0 744.064z" fill="#000000" />
+                    <path d="M464 688a48 48 0 1 0 96 0 48 48 0 0 0-96 0zM488 576h48a8 8 0 0 0 8-8v-272a8 8 0 0 0-8-8h-48a8 8 0 0 0-8 8v272c0 4.416 3.584 8 8 8z" fill="#000000" />
+                  </svg>
+                </div>
+              </div>
+              <div className="friends-plus-wrap" ref={friendsMenuRef}>
+                <button
+                  type="button"
+                  className="friends-plus-btn"
+                  onClick={() => setFriendsMenuOpen(prev => !prev)}
+                >
+                  ＋
+                </button>
+                {friendsMenuOpen && (
+                  <div className="friends-action-menu">
+                    <button
+                      type="button"
+                      className="friends-action-item"
+                      onClick={() => {
+                        setFriendsMenuOpen(false);
+                        if (!addFriendId) {
+                          setAddFriendHint("（Demo）此处仅展示入口文案，暂未接入真实好友系统。");
+                        }
+                      }}
+                    >
+                      <span className="friends-action-icon" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 1024 1024"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                        >
+                          <path d="M732.638 683.179h-74.138c-9.426 0-17.067 7.641-17.067 17.067v26.624c0 9.426 7.641 17.067 17.067 17.067h74.138v74.138c0 9.426 7.641 17.067 17.067 17.067h26.624c9.426 0 17.067-7.641 17.067-17.067v-74.103h74.138c9.426 0 17.067-7.641 17.067-17.067v-26.624c0-9.426-7.641-17.067-17.067-17.067h-74.138v-74.138c0-9.426-7.641-17.067-17.067-17.067h-26.624c-9.426 0-17.067 7.641-17.067 17.067v74.103zM555.827 476.058c-48.746 57.775-78.37 133.065-78.37 215.273 0 0.17 0 0.34 0 0.51 0 78.343 26.829 150.501 71.782 207.641h-482.167c-19.763 0-32.939-16.282-32.939-35.123v-58.47c0-3.55 0.478-6.997 1.365-10.445 9.523-33.178 56.764-62.737 150.153-119.023 17.408-10.479 36.386-21.914 57.071-34.441 26.965-16.589 84.070-43.827 80.896-96.256-0.819-13.141-5.291-27.785-15.019-44.237-14.711-23.313-28.331-41.916-39.936-60.894-22.46-36.932-36.966-74.752-36.898-149.845-0.102-108.646 75.264-222.481 186.607-222.481 1.877 0 3.652 0.137 5.495 0.171 1.843-0.034 3.652-0.171 5.53-0.171 111.343 0 186.709 113.835 186.607 222.447 0.034 53.419-7.27 87.962-19.49 116.634-18.418 40.882-44.299 75.39-76.188 103.177l43.863-46.925-3.891 5.769-4.506 6.69zM763.017 915.593c-111.902 0-202.615-90.714-202.615-202.615s90.714-202.615 202.615-202.615c111.902 0 202.615 90.714 202.615 202.615 0 111.902-90.714 202.615-202.615 202.615z" />
+                        </svg>
+                      </span>
+                      <span>添加好友</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* 这里暂时只作为 Demo：点击右上角「＋」即可看到添加好友入口提示，不再展示输入与搜索区域 */}
             <div className="friends-list">
               {mockFriends.map(f => (
                 <div

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { personalityLevels } from "../config/personalityLevels";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
 import { generateAvatarWithGemini } from "../api/twinApi";
 
 interface TwinStudioProps {
   onNavigateToWorkshop?: () => void;
   onNavigateToMemoryVault?: () => void;
+  onNavigateToWizard?: (level: number) => void;
 }
 
-export const TwinStudio: React.FC<TwinStudioProps> = ({ onNavigateToWorkshop, onNavigateToMemoryVault }) => {
+export const TwinStudio: React.FC<TwinStudioProps> = ({ onNavigateToWorkshop, onNavigateToMemoryVault, onNavigateToWizard }) => {
   // Main Studio State：聚焦一个本体分身
   const [twins, setTwins] = useState([
     { id: "t-001", name: "数字永生分身", desc: "基于你全部人生记忆的一体化分身", avatar: "/avatars/memoji/2.png" }
@@ -66,6 +68,31 @@ export const TwinStudio: React.FC<TwinStudioProps> = ({ onNavigateToWorkshop, on
   };
 
   const [completedLevels, setCompletedLevels] = useState<number>(() => computeCompletedLevels());
+
+  const computeLevelCompletion = (levelId: number): number => {
+    try {
+      const levelDef = personalityLevels.find((l) => l.id === levelId);
+      if (!levelDef) return 0;
+      const raw = window.localStorage.getItem(`twin_soul_level_${levelId}_keywords`);
+      if (!raw) return 0;
+      const obj = JSON.parse(raw) as Record<string, unknown>;
+      if (!obj || typeof obj !== "object") return 0;
+      const fieldIds = levelDef.fields.map((f) => f.id);
+      const total = fieldIds.length;
+      if (!total) return 0;
+      let filled = 0;
+      for (const id of fieldIds) {
+        const v = (obj as Record<string, unknown>)[id];
+        if (v == null) continue;
+        if (Array.isArray(v) && v.length === 0) continue;
+        if (typeof v === "string" && v.trim() === "") continue;
+        filled++;
+      }
+      return Math.round((filled / total) * 100);
+    } catch {
+      return 0;
+    }
+  };
 
   // 统计：已同步到 EverMemOS 且未本地删除的记忆碎片数量
   const computeSyncedVaultCount = () => {
@@ -817,7 +844,7 @@ export const TwinStudio: React.FC<TwinStudioProps> = ({ onNavigateToWorkshop, on
 
           {studioTab === "personality" && (
             <div className="config-section">
-              <div className="workshop-card">
+              <div className="workshop-card soul-bindings-card">
                 <h3 className="card-title">灵魂源泉绑定 (Soul Bindings)</h3>
                 <p className="workshop-desc">选择要将哪些在「灵魂拷贝」中提取的记忆核心灌输给当前分身。</p>
 
@@ -829,22 +856,29 @@ export const TwinStudio: React.FC<TwinStudioProps> = ({ onNavigateToWorkshop, on
                     { id: 4, title: "Level 4: 价值观与道德边界", desc: "决定了分身的批判性思维和对待争议问题的态度。" },
                     { id: 5, title: "Level 5: 知识体系与技能图谱", desc: "专业词汇体系与解决问题的逻辑范式。" },
                     { id: 6, title: "Level 6: 潜意识与梦境", desc: "最深层的意识流，影响分身的幽默感与艺术直觉。" }
-                  ].map(soul => (
-                    <div
-                      key={soul.id}
-                      className="soul-binding-item"
-                    >
-                      {soulKeywords[soul.id] && (
-                        <div className="soul-keywords-wall">
-                          {soulKeywords[soul.id]}
+                  ].map(soul => {
+                    const completion = computeLevelCompletion(soul.id);
+                    return (
+                      <div
+                        key={soul.id}
+                        className="soul-binding-item"
+                        onClick={() => onNavigateToWizard?.(soul.id)}
+                      >
+                        <div className="soul-bg-progress" style={{ width: `${completion}%` }} />
+                        {soulKeywords[soul.id] && (
+                          <div className="soul-keywords-wall">
+                            {soulKeywords[soul.id]}
+                          </div>
+                        )}
+                        <div className="soul-binding-info">
+                          <div className="soul-binding-info-main">
+                            <h4>{soul.title}</h4>
+                            <p>{soul.desc}</p>
+                          </div>
                         </div>
-                      )}
-                      <div className="soul-binding-info">
-                        <h4>{soul.title}</h4>
-                        <p>{soul.desc}</p>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
